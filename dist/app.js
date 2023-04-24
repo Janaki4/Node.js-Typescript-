@@ -14,7 +14,7 @@ mongoose_1.default
     .connect(dbURL)
     .then(() => console.log("db connected"))
     .catch((err) => console.log("not connected" + err));
-app.use(todo_1.default);
+app.use("/public", todo_1.default);
 app.use((err, req, res, next) => {
     return res.status(500).send(err);
 });

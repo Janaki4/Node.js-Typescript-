@@ -12,7 +12,7 @@ mongoose
   .then(() => console.log("db connected"))
   .catch((err) => console.log("not connected" + err));
 
-app.use(todoRouter);
+app.use("/public",todoRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     return res.status(500).send(err);
