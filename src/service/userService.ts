@@ -1,4 +1,4 @@
-import { RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import User from "../modals/user";
 import { CONSTANTS } from "../helpers/Constants/index";
 import {
@@ -8,6 +8,8 @@ import {
 import _ from "lodash";
 import { createJWTToken, verifyJWTHelper } from "../helpers/JWT/index";
 import { confirmationMail } from "../helpers/Mailer/index";
+import { successResponse , errorResponse } from "../helpers/Responses/index"
+import { error } from "console";
 
 export const createUserService: RequestHandler = async (req, res, next) => {
   try {
@@ -33,7 +35,7 @@ export const createUserService: RequestHandler = async (req, res, next) => {
         result.token
       );
     }
-    return res.status(201).send(result);
+    return res.status(201).send(successResponse(result));
   } catch (error) {
     next(error);
   }
@@ -64,10 +66,10 @@ export const userLogin: RequestHandler = async (req, res, next) => {
             email: email,
             token: createdJwt,
           };
-        return res.status(200).send(result);
-      } else return res.status(400).send(CONSTANTS.INCORRECT_PASSWORD);
+        return res.status(200).send(successResponse(result));
+      } else return res.status(400).send(errorResponse(CONSTANTS.INCORRECT_PASSWORD));
     }
-    return res.status(400).send(CONSTANTS.USER_NOT_FOUND);
+    return res.status(400).send(errorResponse(CONSTANTS.USER_NOT_FOUND));
   } catch (error) {
     next(error);
   }
@@ -87,12 +89,12 @@ export const verifyEmail: RequestHandler = async (req, res, next) => {
           { email: decodedJwt.email },
           { isEmailVerified: true }
         );
-        return res.status(200).send(CONSTANTS.EMAIL_VERIFIED);
+        return res.status(200).send( successResponse(CONSTANTS.EMAIL_VERIFIED));
       }
-      return res.status(200).send(CONSTANTS.EMAIL_ALREADY_VERIFIED)
+      return res.status(200).send(successResponse(CONSTANTS.EMAIL_ALREADY_VERIFIED))
     }
     else { 
-      return res.status(400).send(CONSTANTS.UNSUCCESS);
+      return res.status(400).send(errorResponse(CONSTANTS.UNSUCCESS));
     }
   } catch (error) {
     next(error);

@@ -10,6 +10,7 @@ const Bcrypt_1 = require("../helpers/Bcrypt");
 const lodash_1 = __importDefault(require("lodash"));
 const index_2 = require("../helpers/JWT/index");
 const index_3 = require("../helpers/Mailer/index");
+const index_4 = require("../helpers/Responses/index");
 const createUserService = async (req, res, next) => {
     try {
         let { email, password, name } = req.body;
@@ -28,7 +29,7 @@ const createUserService = async (req, res, next) => {
         if (result) {
             const mailRes = await (0, index_3.confirmationMail)(email, name, "Verify your email address to proceed", result.token);
         }
-        return res.status(201).send(result);
+        return res.status(201).send((0, index_4.successResponse)(result));
     }
     catch (error) {
         next(error);
@@ -56,12 +57,12 @@ const userLogin = async (req, res, next) => {
                     email: email,
                     token: createdJwt,
                 };
-                return res.status(200).send(result);
+                return res.status(200).send((0, index_4.successResponse)(result));
             }
             else
-                return res.status(400).send(index_1.CONSTANTS.INCORRECT_PASSWORD);
+                return res.status(400).send((0, index_4.errorResponse)(index_1.CONSTANTS.INCORRECT_PASSWORD));
         }
-        return res.status(400).send(index_1.CONSTANTS.USER_NOT_FOUND);
+        return res.status(400).send((0, index_4.errorResponse)(index_1.CONSTANTS.USER_NOT_FOUND));
     }
     catch (error) {
         next(error);
@@ -79,12 +80,12 @@ const verifyEmail = async (req, res, next) => {
         if (userDetails) {
             if (!(userDetails === null || userDetails === void 0 ? void 0 : userDetails.isEmailVerified)) {
                 await user_1.default.updateOne({ email: decodedJwt.email }, { isEmailVerified: true });
-                return res.status(200).send(index_1.CONSTANTS.EMAIL_VERIFIED);
+                return res.status(200).send((0, index_4.successResponse)(index_1.CONSTANTS.EMAIL_VERIFIED));
             }
-            return res.status(200).send(index_1.CONSTANTS.EMAIL_ALREADY_VERIFIED);
+            return res.status(200).send((0, index_4.successResponse)(index_1.CONSTANTS.EMAIL_ALREADY_VERIFIED));
         }
         else {
-            return res.status(400).send(index_1.CONSTANTS.UNSUCCESS);
+            return res.status(400).send((0, index_4.errorResponse)(index_1.CONSTANTS.UNSUCCESS));
         }
     }
     catch (error) {
