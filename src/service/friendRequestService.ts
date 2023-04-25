@@ -3,8 +3,9 @@ import { RequestHandler } from "express";
 import { successResponse, errorResponse } from "../helpers/Responses/index";
 import { CONSTANTS } from "../helpers/Constants/index";
 import { CustomRequest } from "../Interface/userInterface";
-import _ from "lodash";
 import User from "../modals/user";
+import { IUser } from "../Interface/userInterface";
+import _ from "lodash";
 
 export const SendFriendRequestService: RequestHandler = async (
   req: CustomRequest,
@@ -12,7 +13,7 @@ export const SendFriendRequestService: RequestHandler = async (
   next
 ) => {
   try {
-    const userId:string = req.id!;
+    const userId: string = req.id!;
     const receipientId = req.params.receipientid;
     if (userId === receipientId)
       return res.status(400).send(successResponse(CONSTANTS.INVALID_REQUEST));
@@ -20,8 +21,9 @@ export const SendFriendRequestService: RequestHandler = async (
       _id: receipientId,
       isDeleted: false,
     });
-      if (isUserExists) {
-        if (isUserExists.friendsList.includes(userId)) return res.status(400).send(errorResponse(CONSTANTS.ALREADY_FRIENDS))
+    if (isUserExists) {
+      if (isUserExists.friendsList.includes(userId))
+        return res.status(400).send(errorResponse(CONSTANTS.ALREADY_FRIENDS));
       await FriendRequest.create({
         requestedUser: receipientId,
         recipientUser: userId,
@@ -50,9 +52,9 @@ export const acceptFriendRequestService: RequestHandler = async (
       return res.status(200).send(successResponse(CONSTANTS.INVALID_REQUEST));
 
     const isRecipientExists = await FriendRequest.findOne({
-      requestedUser:  userId,
+      requestedUser: userId,
       requestStatus: 0,
-      recipientUser: recipientId ,
+      recipientUser: recipientId,
     });
     if (isRecipientExists) {
       const result = await FriendRequest.updateOne(
@@ -67,7 +69,6 @@ export const acceptFriendRequestService: RequestHandler = async (
         }
       );
       if (result == null) {
-
         res.status(400).send(successResponse(CONSTANTS.INVALID_REQUEST));
       }
       if (+actionType === 1) {
@@ -84,13 +85,11 @@ export const acceptFriendRequestService: RequestHandler = async (
           return res.status(400).send(errorResponse(CONSTANTS.INVALID_REQUEST));
         }
       } else {
-
         return res
           .status(200)
           .send(successResponse(CONSTANTS.FRIEND_REQUEST_DECLINED));
       }
     } else {
-
       return res.status(400).send(successResponse(CONSTANTS.INVALID_REQUEST));
     }
   } catch (error) {
@@ -114,3 +113,36 @@ export const pendingFriendRequestListService: RequestHandler = async (
     next(error);
   }
 };
+
+export const friendsListService: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next
+) => {
+  try {
+    const userId = req.id;
+    const result = await User.findOne({
+      _id: userId,
+      isDeleted: false,
+    }).populate("friendsList");
+    if (result) {
+      const resData = result?.friendsList.map((data: any) => {
+        const newData = { ...data._doc };
+        delete newData?.password;
+        delete newData?.isDeleted;
+        delete newData?.isEmailVerified;
+        delete newData?.token;
+        delete newData?.friendsList;
+        delete newData?.createdAt;
+        delete newData?.updatedAt;
+        delete newData?.__v;
+        return newData;
+      });
+      res.status(200).send(successResponse(resData));
+    } else res.status(400).send(errorResponse(CONSTANTS.UNSUCCESS));
+  } catch (error) {
+    next(error);
+  }
+};
+
+

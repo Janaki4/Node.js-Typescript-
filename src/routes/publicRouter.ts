@@ -1,7 +1,7 @@
 import { Router, RequestHandler } from "express";
 import { createUserService ,userLogin, getUserService ,verifyEmail, } from '../service/userService'
 import { userSignUpValidator , userLogInValidator,verifyEmailValidator} from "../validator/user";
-import { SendFriendRequestService ,acceptFriendRequestService , pendingFriendRequestListService } from "../service/friendRequestService"
+import { SendFriendRequestService ,acceptFriendRequestService , pendingFriendRequestListService ,friendsListService } from "../service/friendRequestService"
 import { validate } from "../validator";
 import { auth } from "../helpers/Middleware/jwt";
 const router = Router();
@@ -19,5 +19,6 @@ router.route("/verify-email/:token").get(validate(verifyEmailValidator), verifyE
 router.route("/user/friend-request/send/:receipientid").post(auth , SendFriendRequestService)
 router.route("/user/friend-request/:recipientid/action/:actiontype").post(auth, acceptFriendRequestService)
 router.route("/user/friend-request/pending-list").get(auth , pendingFriendRequestListService)
+router.route("/user/friend-list").get(auth , friendsListService)
 
 export default router;

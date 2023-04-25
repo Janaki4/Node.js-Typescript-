@@ -16,7 +16,7 @@ const friendRequestSchema = new mongoose_1.Schema({
     requestStatus: {
         type: Number,
         default: 0
-        // 0,1,2 -> requested , accepted , rejected
+        // 0,1,2 -> requested , accepted , declined
     }
 });
 exports.FriendRequest = (0, mongoose_1.model)("FriendRequest", friendRequestSchema);

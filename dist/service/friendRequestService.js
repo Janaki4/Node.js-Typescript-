@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pendingFriendRequestListService = exports.acceptFriendRequestService = exports.SendFriendRequestService = void 0;
+exports.friendsListService = exports.pendingFriendRequestListService = exports.acceptFriendRequestService = exports.SendFriendRequestService = void 0;
 const friendRequest_1 = require("../modals/friendRequest");
 const index_1 = require("../helpers/Responses/index");
 const index_2 = require("../helpers/Constants/index");
@@ -100,3 +100,33 @@ const pendingFriendRequestListService = async (req, res, next) => {
     }
 };
 exports.pendingFriendRequestListService = pendingFriendRequestListService;
+const friendsListService = async (req, res, next) => {
+    try {
+        const userId = req.id;
+        const result = await user_1.default.findOne({
+            _id: userId,
+            isDeleted: false,
+        }).populate("friendsList");
+        if (result) {
+            const resData = result === null || result === void 0 ? void 0 : result.friendsList.map((data) => {
+                const newData = { ...data._doc };
+                newData === null || newData === void 0 ? true : delete newData.password;
+                newData === null || newData === void 0 ? true : delete newData.isDeleted;
+                newData === null || newData === void 0 ? true : delete newData.isEmailVerified;
+                newData === null || newData === void 0 ? true : delete newData.token;
+                newData === null || newData === void 0 ? true : delete newData.friendsList;
+                newData === null || newData === void 0 ? true : delete newData.createdAt;
+                newData === null || newData === void 0 ? true : delete newData.updatedAt;
+                newData === null || newData === void 0 ? true : delete newData.__v;
+                return newData;
+            });
+            res.status(200).send((0, index_1.successResponse)(resData));
+        }
+        else
+            res.status(400).send((0, index_1.errorResponse)(index_2.CONSTANTS.UNSUCCESS));
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.friendsListService = friendsListService;

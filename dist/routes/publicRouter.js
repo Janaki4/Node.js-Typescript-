@@ -17,4 +17,5 @@ router.route("/verify-email/:token").get((0, validator_1.validate)(user_1.verify
 router.route("/user/friend-request/send/:receipientid").post(jwt_1.auth, friendRequestService_1.SendFriendRequestService);
 router.route("/user/friend-request/:recipientid/action/:actiontype").post(jwt_1.auth, friendRequestService_1.acceptFriendRequestService);
 router.route("/user/friend-request/pending-list").get(jwt_1.auth, friendRequestService_1.pendingFriendRequestListService);
+router.route("/user/friend-list").get(jwt_1.auth, friendRequestService_1.friendsListService);
 exports.default = router;

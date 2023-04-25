@@ -32,6 +32,20 @@ const userSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
+
+const User = model<IUser>("User", userSchema);
+
+export default User;
+
+
+
+
+
+
+
+
+
+
 // userSchema.pre("save", async function (next) {
 //   let data = this as IUser;
 //   if (data.isModified("password")) {
@@ -39,7 +53,3 @@ const userSchema = new Schema<IUser>(
 //   }
 //   next();
 // });
-
-const User = model<IUser>("User", userSchema);
-
-export default User;

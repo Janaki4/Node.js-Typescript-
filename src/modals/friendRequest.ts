@@ -16,7 +16,7 @@ const friendRequestSchema = new Schema<FriendRequestInterface>({
     requestStatus: {
         type: Number,
         default: 0
-        // 0,1,2 -> requested , accepted , rejected
+        // 0,1,2 -> requested , accepted , declined
     }
 })
 

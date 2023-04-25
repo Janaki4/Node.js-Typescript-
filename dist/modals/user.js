@@ -51,6 +51,8 @@ const userSchema = new mongoose_1.Schema({
     },
     friendsList: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "User" }],
 }, { timestamps: true });
+const User = (0, mongoose_1.model)("User", userSchema);
+exports.default = User;
 // userSchema.pre("save", async function (next) {
 //   let data = this as IUser;
 //   if (data.isModified("password")) {
@@ -58,5 +60,3 @@ const userSchema = new mongoose_1.Schema({
 //   }
 //   next();
 // });
-const User = (0, mongoose_1.model)("User", userSchema);
-exports.default = User;
