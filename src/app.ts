@@ -6,7 +6,7 @@ import { errorResponse } from "./helpers/Responses";
 
 const app = express();
 app.use(json());
-app.options('*', cors());
+app.use(cors())
 
 import publicRouter from "./routes/publicRouter";
 
