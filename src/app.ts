@@ -5,8 +5,13 @@ import cors from "cors";
 import { errorResponse } from "./helpers/Responses";
 
 const app = express();
-app.use(json());
-app.use(cors())
+app.use(express.json());
+app.options('*', cors());
+app.use(cors({
+  origin: "http://localhost:3001",
+  credentials: true
+}))
+app.set('trust proxy', 1);
 
 import publicRouter from "./routes/publicRouter";
 
