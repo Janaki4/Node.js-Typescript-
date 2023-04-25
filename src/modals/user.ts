@@ -1,13 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
-
-export interface IUser extends mongoose.Document {
-  email: string;
-  password: string;
-  name: string;
-  isDeleted?: boolean;
-  token: string;
-  isEmailVerified: boolean;
-}
+import { IUser } from "../Interface/userInterface";
 
 const userSchema = new Schema<IUser>(
   {
@@ -33,8 +25,9 @@ const userSchema = new Schema<IUser>(
     },
     isEmailVerified: {
       type: Boolean,
-      default:false
-    }
+      default: false,
+    },
+    friendsList: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

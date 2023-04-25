@@ -1,16 +1,23 @@
 import { Router, RequestHandler } from "express";
 import { createUserService ,userLogin, getUserService ,verifyEmail, } from '../service/userService'
-import { userSignUpValidator , userLogInValidator,verifyEmailValidator,  getUserValidator} from "../validator/user";
+import { userSignUpValidator , userLogInValidator,verifyEmailValidator} from "../validator/user";
+import { SendFriendRequestService ,acceptFriendRequestService , pendingFriendRequestListService } from "../service/friendRequestService"
 import { validate } from "../validator";
+import { auth } from "../helpers/Middleware/jwt";
 const router = Router();
 
-
+// **************** Public routes *********
 // router.post("/add/user" , validate(createUserValidator) , createUserService);
-router.route("/user/signup").post( validate(userSignUpValidator) , createUserService)
-router.route("/user/login").post( validate(userLogInValidator) ,  userLogin)
-router.route("/user/verify-email/:token").get(validate(verifyEmailValidator), verifyEmail)
+router.route("/signup").post( validate(userSignUpValidator) , createUserService)
+router.route("/login").post( validate(userLogInValidator) ,  userLogin)
+router.route("/verify-email/:token").get(validate(verifyEmailValidator), verifyEmail)
 
-router.route("/get/:id").get(validate(getUserValidator) , getUserService)
+// router.route("/get/:id").get(validate(getUserValidator) , getUserService)
 
+//////////////////***************************User routes */
+
+router.route("/user/friend-request/send/:receipientid").post(auth , SendFriendRequestService)
+router.route("/user/friend-request/:recipientid/action/:actiontype").post(auth, acceptFriendRequestService)
+router.route("/user/friend-request/pending-list").get(auth , pendingFriendRequestListService)
 
 export default router;

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyEmailValidator = exports.getUserValidator = exports.userLogInValidator = exports.userSignUpValidator = void 0;
 const zod_1 = require("zod");
+//public
 exports.userSignUpValidator = zod_1.z.object({
     body: zod_1.z.object({
         email: zod_1.z.string({ required_error: "email is required", }).email({ message: 'Must be a valid email' }),
@@ -25,3 +26,15 @@ exports.verifyEmailValidator = zod_1.z.object({
         token: zod_1.z.string()
     })
 });
+// private
+// export const friendRequestActionValidator = z.object({
+//   params: z.object({
+//     recipientid: z.string({required_error:"id is reauired"}),
+//     actiontype:z.string({required_error:"action is required"})
+//   })
+// })
+// export const sendFriendRequestValidator = z.object({
+//   params: z.object({
+//     recipientid: z.string({required_error:"id is reauired"})
+//   })
+// })

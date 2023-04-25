@@ -20,5 +20,6 @@ interface JwtPayload {
     id?:string
   }
 export async function verifyJWTHelper(token: string): Promise<JwtPayload> {
-  return await jwt.verify(token, process.env.JWT_SECRET_KEY);
+  const decoded = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+  return decoded
 }

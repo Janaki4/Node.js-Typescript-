@@ -7,7 +7,7 @@ const transporter = nodeMailer.createTransport({
   secure: false,
   auth: {
     user: process.env.MAILER_USER,
-    pass: process.env.MAILER_PASSWORD,
+    pass: process.env.MAILER_PASSWORD, 
   },
 });
 
@@ -17,7 +17,7 @@ export const confirmationMail = async (
   message: string,
   token: string
 ): Promise<{}> => {
-  const html: string = `http://localhost:3000/public/user/verify-email/${token}`;
+  const html: string = `http://localhost:3000/public/verify-email/${token}`;
   const emailSent =  await transporter.sendMail({
     from: process.env.MAILER_USER,
     to: email,

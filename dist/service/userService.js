@@ -16,7 +16,7 @@ const createUserService = async (req, res, next) => {
         let { email, password, name } = req.body;
         const isUserAlreadyExists = await user_1.default.findOne({ email, isDeleted: false });
         if (isUserAlreadyExists) {
-            return res.status(400).send(index_1.CONSTANTS.DUPLICATION);
+            return res.status(400).send((0, index_4.successResponse)(index_1.CONSTANTS.DUPLICATION));
         }
         password = await (0, Bcrypt_1.encryptPasswordHelper)(password);
         const createdJwt = await (0, index_2.createJWTToken)({ name, email, password });
@@ -45,7 +45,7 @@ const userLogin = async (req, res, next) => {
         });
         if (isUserExists) {
             if (!isUserExists.isEmailVerified) {
-                return res.status(400).send(index_1.CONSTANTS.EMAIL_NOT_VERIFIED);
+                return res.status(400).send((0, index_4.errorResponse)(index_1.CONSTANTS.EMAIL_NOT_VERIFIED));
             }
             const isPasswordCorrect = await (0, Bcrypt_1.comparePasswordHelper)(password, isUserExists.password);
             if (isPasswordCorrect) {

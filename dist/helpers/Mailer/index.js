@@ -13,7 +13,7 @@ const transporter = nodeMailer.createTransport({
     },
 });
 const confirmationMail = async (email, name, message, token) => {
-    const html = `http://localhost:3000/public/user/verify-email/${token}`;
+    const html = `http://localhost:3000/public/verify-email/${token}`;
     const emailSent = await transporter.sendMail({
         from: process.env.MAILER_USER,
         to: email,

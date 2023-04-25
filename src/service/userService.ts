@@ -9,7 +9,6 @@ import _ from "lodash";
 import { createJWTToken, verifyJWTHelper } from "../helpers/JWT/index";
 import { confirmationMail } from "../helpers/Mailer/index";
 import { successResponse , errorResponse } from "../helpers/Responses/index"
-import { error } from "console";
 
 export const createUserService: RequestHandler = async (req, res, next) => {
   try {
@@ -17,7 +16,7 @@ export const createUserService: RequestHandler = async (req, res, next) => {
     const isUserAlreadyExists = await User.findOne({ email, isDeleted: false });
 
     if (isUserAlreadyExists) {
-      return res.status(400).send(CONSTANTS.DUPLICATION);
+      return res.status(400).send(successResponse(CONSTANTS.DUPLICATION));
     }
     password = await encryptPasswordHelper(password);
     const createdJwt = await createJWTToken({ name, email, password });
@@ -50,7 +49,7 @@ export const userLogin: RequestHandler = async (req, res, next) => {
     });
     if (isUserExists) {
       if (!isUserExists.isEmailVerified) {
-        return res.status(400).send(CONSTANTS.EMAIL_NOT_VERIFIED);
+        return res.status(400).send(errorResponse(CONSTANTS.EMAIL_NOT_VERIFIED));
       }
       const isPasswordCorrect = await comparePasswordHelper(
         password,

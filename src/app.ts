@@ -1,8 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 import { json } from "body-parser";
 import mongoose from "mongoose";
+import cors from "cors";
+import { errorResponse } from "./helpers/Responses";
+
 const app = express();
 app.use(json());
+app.options('*', cors());
 
 import publicRouter from "./routes/publicRouter";
 
@@ -15,7 +19,7 @@ mongoose
 app.use("/public",publicRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    return res.status(500).send(err);
+    return res.status(500).send(errorResponse(err));
 });
 
 app.listen(3000);

@@ -9,6 +9,7 @@ async function createJWTToken(data) {
 }
 exports.createJWTToken = createJWTToken;
 async function verifyJWTHelper(token) {
-    return await jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+    return decoded;
 }
 exports.verifyJWTHelper = verifyJWTHelper;

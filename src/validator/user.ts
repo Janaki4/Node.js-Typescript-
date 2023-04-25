@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+//public
 export const userSignUpValidator = z.object({
   body: z.object({
     email: z.string({required_error: "email is required",}).email({ message: 'Must be a valid email' }),
@@ -26,3 +27,17 @@ export const verifyEmailValidator = z.object({
     token: z.string()
   })
 })
+
+// private
+// export const friendRequestActionValidator = z.object({
+//   params: z.object({
+//     recipientid: z.string({required_error:"id is reauired"}),
+//     actiontype:z.string({required_error:"action is required"})
+//   })
+// })
+
+// export const sendFriendRequestValidator = z.object({
+//   params: z.object({
+//     recipientid: z.string({required_error:"id is reauired"})
+//   })
+// })
