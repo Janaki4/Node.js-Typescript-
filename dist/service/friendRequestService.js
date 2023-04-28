@@ -11,19 +11,19 @@ const user_1 = __importDefault(require("../modals/user"));
 const SendFriendRequestService = async (req, res, next) => {
     try {
         const userId = req.id;
-        const receipientId = req.params.receipientid;
-        if (userId === receipientId)
+        const requestedToUserId = req.params.recipientid;
+        if (userId === requestedToUserId)
             return res.status(400).send((0, index_1.successResponse)(index_2.CONSTANTS.INVALID_REQUEST));
-        const isUserExists = await user_1.default.findOne({
-            _id: receipientId,
+        const isRecipientUserExists = await user_1.default.findOne({
+            _id: requestedToUserId,
             isDeleted: false,
         });
-        if (isUserExists) {
-            if (isUserExists.friendsList.includes(userId))
+        if (isRecipientUserExists) {
+            if (isRecipientUserExists.friendsList.includes(userId))
                 return res.status(400).send((0, index_1.errorResponse)(index_2.CONSTANTS.ALREADY_FRIENDS));
             await friendRequest_1.FriendRequest.create({
-                requestedUser: receipientId,
-                recipientUser: userId,
+                requestedBy: userId,
+                requestedTo: requestedToUserId,
             });
             return res.status(201).send((0, index_1.successResponse)(index_2.CONSTANTS.SUCCESS));
         }
@@ -44,16 +44,16 @@ const acceptFriendRequestService = async (req, res, next) => {
         const recipientId = req.params.recipientid;
         if (+actionType !== 1 && +actionType !== 2)
             return res.status(200).send((0, index_1.successResponse)(index_2.CONSTANTS.INVALID_REQUEST));
-        const isRecipientExists = await friendRequest_1.FriendRequest.findOne({
-            requestedUser: userId,
+        const isRecordExists = await friendRequest_1.FriendRequest.findOne({
+            requestedTo: userId,
             requestStatus: 0,
-            recipientUser: recipientId,
+            requestedBy: recipientId,
         });
-        if (isRecipientExists) {
+        if (isRecordExists) {
             const result = await friendRequest_1.FriendRequest.updateOne({
-                requestedUser: userId,
-                recipientUser: recipientId,
+                requestedTo: userId,
                 requestStatus: 0,
+                requestedBy: recipientId,
             }, { requestStatus: +actionType }, {
                 new: true,
             });
@@ -61,7 +61,7 @@ const acceptFriendRequestService = async (req, res, next) => {
                 res.status(400).send((0, index_1.successResponse)(index_2.CONSTANTS.INVALID_REQUEST));
             }
             if (+actionType === 1) {
-                const addedFriend = await user_1.default.updateOne({ _id: userId }, { $push: { friendsList: recipientId } });
+                const addedFriend = await user_1.default.updateOne({ _id: recipientId }, { $push: { friendsList: userId } });
                 if (addedFriend.modifiedCount) {
                     return res
                         .status(200)
@@ -90,9 +90,9 @@ const pendingFriendRequestListService = async (req, res, next) => {
     try {
         const userId = req.id;
         const pendindList = await friendRequest_1.FriendRequest.find({
-            requestedUser: userId,
+            requestedTo: userId,
             requestStatus: 0,
-        }).populate("recipientUser");
+        }).populate("requestedBy");
         return res.status(200).send((0, index_1.successResponse)(pendindList));
     }
     catch (error) {

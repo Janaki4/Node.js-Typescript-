@@ -49,7 +49,7 @@ const userSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
-    friendsList: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "User" }],
+    friendsList: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: ["User", "Post"] }],
 }, { timestamps: true });
 const User = (0, mongoose_1.model)("User", userSchema);
 exports.default = User;

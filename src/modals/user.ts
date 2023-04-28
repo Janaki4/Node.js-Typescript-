@@ -27,7 +27,7 @@ const userSchema = new Schema<IUser>(
       type: Boolean,
       default: false,
     },
-    friendsList: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    friendsList: [{ type: mongoose.Schema.Types.ObjectId, ref: ["User" , "Post"] }],
   },
   { timestamps: true }
 );

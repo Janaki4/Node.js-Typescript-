@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FriendRequest = void 0;
 const mongoose_1 = require("mongoose");
 const friendRequestSchema = new mongoose_1.Schema({
-    requestedUser: {
+    requestedBy: {
         type: String,
         required: true,
         ref: "User"
     },
-    recipientUser: {
+    requestedTo: {
         type: String,
         required: true,
         ref: "User"

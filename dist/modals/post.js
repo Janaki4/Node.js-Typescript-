@@ -18,6 +18,7 @@ const postSchema = new mongoose_1.Schema({
     authorId: {
         type: String,
         required: true,
+        ref: "User"
     },
     taggedPeople: {
         type: [String],

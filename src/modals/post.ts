@@ -18,6 +18,7 @@ const postSchema = new Schema<PostInterface>(
     authorId: {
       type: String,
       required: true,
+      ref:"User"
     },
     taggedPeople: {
       type: [String],

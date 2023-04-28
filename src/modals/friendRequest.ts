@@ -3,12 +3,12 @@ import { FriendRequestInterface } from "../Interface/userInterface";
 import { string } from "zod";
 
 const friendRequestSchema = new Schema<FriendRequestInterface>({
-    requestedUser: {
+    requestedBy: {
         type: String,
         required: true,
         ref: "User"
     },
-    recipientUser: {
+    requestedTo: {
         type: String,
         required: true,
         ref: "User"

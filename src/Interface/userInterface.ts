@@ -12,8 +12,8 @@ export interface IUser extends mongoose.Document {
 }
 
 export interface FriendRequestInterface extends mongoose.Document {
-  requestedUser: String;
-  recipientUser: String;
+  requestedBy: String;
+  requestedTo: String;
   requestStatus: number;
 }
 
